@@ -28,8 +28,8 @@ permissions:
 # `if`, but job-level `if` runs AFTER the concurrency group is claimed, so with an
 # unconditional cancel-in-progress it would kill the very review that posted it.
 concurrency:
-  group: mentor-review-${{ .github.event.pull_request.number || .github.event.issue.number }}
-  cancel-in-progress: ${{ .github.event_name == 'pull_request' || startsWith(.github.event.comment.body || '', '/review') }}
+  group: mentor-review-${{ github.event.pull_request.number || github.event.issue.number }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' || startsWith(.github.event.comment.body || '', '/review') }}
 
 jobs:
   review:
@@ -47,7 +47,7 @@ jobs:
        contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association))
 
     env:
-      PR_NUMBER: ${{ .github.event.pull_request.number || .github.event.issue.number }}
+      PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
 
     steps:
       # Immediate feedback that `/review` was picked up — the review itself
